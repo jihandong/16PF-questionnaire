@@ -1,3 +1,5 @@
+import java.awt.BorderLayout;
+
 import javax.swing.*;
 
 public class PfGui {
@@ -8,30 +10,52 @@ public class PfGui {
     }
 
     public void go() {
+        var pf = new Pf();
         var frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
         var panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-
-        var comboNumer = new JComboBox<Integer>();
-        for(int i = 1; i <= 187; i++) comboNumer.addItem(i);
-        comboNumer.addActionListener(event -> {/* TODO: comboNum listener */});
-
+        var label = new JLabel();
+        var comboNumber = new JComboBox<Integer>();
+        for(int i = 1; i <= 187; i++) comboNumber.addItem(i);
         var comboOption = new JComboBox<String>();
         comboOption.addItem("X");
         comboOption.addItem("A");
         comboOption.addItem("B");
         comboOption.addItem("C");
-        comboOption.addActionListener(event -> {/* TODO: comboOption listener */});
-
         JButton buttonBack = new JButton("上一题");
-        buttonBack.addActionListener(event -> {/* TODO: buttonBack listener */});
-        
         JButton buttonNext = new JButton("下一题");
-        buttonNext.addActionListener(event -> {/* TODO: buttonNext listener */});
+        JButton buttonFin = new JButton("完成");
+
+        comboNumber.addActionListener(event -> {/* TODO: comboNum listener */
+            label.setText(pf.questionnaire[/**/].question);
+            comboOption.setSelectedIndex(/**/);
+        });
+        comboOption.addActionListener(event -> {/* TODO: comboOption listener */
+            pf.record(/**/, /**/);
+        });
+        buttonBack.addActionListener(event -> {/* TODO: buttonBack listener */
+            comboNumber/* */
+            label.setText(pf.questionnaire[/**/].question);
+            comboOption.setSelectedIndex(/**/);
+        });
+        buttonNext.addActionListener(event -> {/* TODO: buttonNext listener */
+            comboNumber/* */
+            label.setText(pf.questionnaire[/**/].question);
+            comboOption.setSelectedIndex(/**/);
+        });
+        buttonFin.addActionListener(event -> {/* TODO: buttonFin listener */
+
+        });
         
-        // TODO: bind panel->frame, omponent->panel
+        panel.add(buttonBack);
+        panel.add(comboNumber);
+        panel.add(comboOption);
+        panel.add(buttonNext);
+        panel.add(buttonFin);
+        frame.getContentPane().add(BorderLayout.SOUTH, panel);
+        frame.getContentPane().add(BorderLayout.NORTH, label);
+
         frame.setSize(300, 300);
         frame.setVisible(true);
     }
