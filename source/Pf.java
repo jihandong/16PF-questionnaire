@@ -3,28 +3,23 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 public class Pf {
-    PfQuestion[] questionnaire;
+    private PfQuestion[] questionnaire;
     private Map<String,Integer> result;
 
     public Pf() {
-        this.questionnaire = new PfQuestion[187];
+        this.questionnaire = new PfQuestion[200];
         this.result = new HashMap<String,Integer>();
 
         try { // set questionnaire
             Scanner in = new Scanner(
                 Path.of("D:\\code\\16PF-questionnaire\\source\\question.txt"), 
                 StandardCharsets.UTF_8);
-            for(int i = 0; i < 187; i++) {
-                String strQ = in.next(); 
-                String strA = in.next(); 
-                String strB = in.next(); 
-                String strC = in.next();
-                /* check invalid input
-                if (strA.charAt(0) != 'A' || strC.charAt(0) != 'C') {
-                    System.out.println(strQ);
-                    System.out.printf("%s %s %s\n", strA, strB, strC);
-                }*/
-                this.questionnaire[i] = new PfQuestion(strQ, strA, strB, strC);
+            for(int i = 1; i <= 187; i++) {
+                String str = in.next() + "\n";
+                str += in.next(); str += "\n";
+                str += in.next(); str += "\n";
+                str += in.next(); str += "\n";
+                this.questionnaire[i] = new PfQuestion(str);
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -35,11 +30,10 @@ public class Pf {
                 Path.of("D:\\code\\16PF-questionnaire\\source\\answer.txt"), 
                 StandardCharsets.UTF_8);
             while(in.hasNext()) {
-                String[] tmp = in.next().split("\\.");
+                String[] tmp = in.next().split("\\.|．");
                 int num = Integer.valueOf(tmp[0]); 
                 String ans = tmp[1];
-                //System.out.printf("%d:%s\n", num, ans);
-                this.questionnaire[num-1].setRightAnswer(ans); 
+                this.questionnaire[num].rightAnswer = ans; 
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -62,7 +56,7 @@ public class Pf {
                     for (String n : tmp) {
                         if (n != null) {
                             int num = Integer.valueOf(n);
-                            this.questionnaire[num].setGroup(group);
+                            this.questionnaire[num].group = group;
                             //System.out.printf("%s:%s\n", num, group);
                         }
                     }
@@ -71,10 +65,6 @@ public class Pf {
         } catch(Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void record(int num, String ans) {
-        this.questionnaire[num-1].setUserAnswer(ans);
     }
     
     public void count(String grp, int[] t) {
@@ -91,9 +81,11 @@ public class Pf {
         else this.result.put(grp, 10);
     }
 
-    public void finish() {
+    public Map<String,Integer> finish() {
+
         // raw point
-        for(PfQuestion q : this.questionnaire) {
+        for(int i = 3; i <= 186; i++) {
+            PfQuestion q = this.questionnaire[i];
             if(!q.group.equals("X")) {
                 int cnt = this.result.get(q.group);
                 this.result.put(q.group, cnt+q.grade());
@@ -118,5 +110,23 @@ public class Pf {
         this.count("Q3", new int[] {4, 6, 8,10,12,14,15,17,18});
         this.count("Q4", new int[] {2, 4, 6, 8,11,14,16,19,21});
 
+        // result
+        return this.result;
+    }
+
+    public int check() {
+        for(int i = 3; i <= 186; i++) {
+            if(this.questionnaire[i].noAnswer()) 
+                return i;
+        }
+        return 0;
+    }
+
+    public void record(int num, String ans) {
+        this.questionnaire[num].userAnswer = ans;
+    }
+
+    public PfQuestion get(int num) {
+        return this.questionnaire[num];
     }
 }

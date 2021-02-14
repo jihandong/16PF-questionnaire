@@ -1,26 +1,17 @@
 public class PfQuestion {
     String question;
-    String[] option;
     String group;
-    private String rightAnswer;
-    private String userAnswer;
+    String rightAnswer;
+    String userAnswer;
 
-    public PfQuestion(String strQ, String strA, String strB, String strC) {
-        this.question = strQ;
-        this.option = new String[] {strA, strB, strC};
+    public PfQuestion(String str) {
+        this.question = str;
         this.group = "X";
+        this.userAnswer = "X";
     }
 
-    public void setGroup(String grp) {
-        this.group = grp;
-    }
-
-    public void setRightAnswer(String ans) {
-        this.rightAnswer = ans;
-    }
-
-    public void setUserAnswer(String ans) {
-        this.userAnswer = ans;
+    public boolean noAnswer() {
+        return this.userAnswer.equals("X");
     }
 
     public int grade() {
